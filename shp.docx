@@ -1,0 +1,154 @@
+## Примеры использования функционалов
+
+```
+(defun decart (lstx lsty)
+        (mapcon #'(lambda (x) (mapcar #'(lambda (y) (list x y)) lsty)) lstx))
+
+(decart '(a b) '(1 2)) -> ((a 1) (a 2) (b 1) (b 2))
+```
+---
+
+```
+(defun consistof (lst)
+    (if (member (car lst) (cdr lst) 1 0 )))
+
+(defun all_last_element (lst)
+    (if (eql (consistof lst) 0) (list (car lst) () )))
+
+(defun collection_to_set (lst)
+    (mapcon #'all_last_element lst))
+
+
+(collection_to_set '(i t i q t k s i f k )) -> (g t s i f k)
+
+```
+
+## Рекурсия
+1) простая рекурсия - рекурсивный вызов встречается 1 раз
+2) первого порядка - вызывается несколько раз
+3) взаимная рекурсия - описывается несколько функций которые рекурсивно вызывают друг друга
+
+---
+проблемы:
+   1) неэффективный способ реазилации рекурсии
+   2) долно быть условие остоновки рекусрии
+   3) изменение аргументов при переходе на другие уровни
+
+---
+
+хвостовая рекурсия - на входе делаем все необходимое (во всех лабах используем только ее)
+
+для организации рекурсии используют cond
+```
+
+(defun fn (x)
+    (cond (end_test end_value) // условий выхода может быть несколько
+        (t (fn (changed_x)))))
+
+```
+---
+
+дополняемая рекурсия - при обращении к рекурсивной функции используется дополнительная функция, но не в кач-ве аргумента вызова, а вне его
+
+```
+(defun fn (x)
+    (cond (end_test end_value) // условий выхода может быть несколько
+        (t (add_function add_value
+            (fn (changed_x))))))
+```
+
+PRIMERCHIK SUKA
+```
+(defun my_len (lst)
+    (cond (( null lst) 0)
+        (t (+ 1 (my_len (cdr lst))))))
+```
+---
+
+доплняемая рекурсия использующая cons
+```
+(defun fn (x)
+    (cond (end_test end_value)
+        (t (cons new_el
+            (fn (changed_x))))))
+
+```
+
+---
+рекурсии 1 порядка
+```
+(defun fn (x)
+    (cond (end_test end_value)
+        (add_test (add_function add_value
+            (fn (changed1_x))))
+        (t (fn (changed2_x)))))
+
+(defun fn (x)
+    (cond (end_test end_value)
+        (t (combiner (fn (changed1_x))
+                     (fn (changed2_x)))))
+```
+
+для преобразования нехвостовой рекурсии в хвостовую рекомендуется использовать дополнительный параметр, в которм постепенно будет формироваться результат работы рекурсивной функции.
+таким образом в описании функции возникает аргументов больше чем требуется пользователю, очень асто 1 вызов рекурсивной функции выполняют с начальным значением параметра предназначенного для результата равным любо пустому списку либо нулем, если это числовой результат, или с фиксированным числовым значеним.
+
+
+# Лекция 4 18.03.2019
+
+
+Длинна списка
+
+```
+взять у вани
+```
+
+
+сортировка вставками
+```
+(defun insert_hlp (x lst)
+    (cond ((null lst ) (list x))
+        (( <= x (car lst)) (cons x lst))
+        (t (cons (car lst) (insert_hlp x (cdr lst))))))
+
+(defun sort_hlp (lst1 lst2)
+    (cond ((null lst1) lst2)
+        (t (sort_hlp (crd lst1) (insert_hlp (car lst1) lst2)))))
+
+
+(defun sort_ins (lst) (sort_hlp lst ()))
+```
+
+фукнция которая выделяет символы из исходного смешанного списка
+```
+(defun extract_symb (lst) 
+    (cond (( null lst ())
+        ((symbolp (car lst) (cons (car lst)
+        (t (extract_symb (cdr lst)))))
+```
+
+первое число из списка
+```
+(defun first_numb (lst)
+    (cond ((numberp lst) lst)
+        ((atom lst) nil)
+        (t (or (first_numb (car lst))
+                (first_numb (cdr lst))))))
+
+```
+
+
+хз что делает эта функция
+```
+(defun cons_sells (lst)
+    (if (atom lst) 0
+        (t (length lst)
+            (reduce #'+ (mapcar #'cons_sells lst)))))
+```
+
+
+хз что делает эта функция  2
+```
+(defun info_one (lst rst)
+    (cond (( null lst) rst)
+          (( atom lst) (cons lst rst)2
+          (t (info_one (car lst) (info_one (cdr lst) rst))

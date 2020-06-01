@@ -1,0 +1,5 @@
+http://filonenko-mikhail.github.io/cltl2-doc/ru/clmse59.html#x75-11200011.3
+
+Если скажет, что в первом номере не совсем так, то первым действием идёт проверка на вычислимость equel'а
+
+http://catstail.narod.ru/homelisp/classic_funct.html
